@@ -43,12 +43,22 @@ export default function Visualizer({ uploadedImage }) {
       <div className="relative w-full aspect-video bg-gray-200">
         {/* Display the uploaded image only if both image and title are available */}
         {uploadedImage && uploadedImage.image && uploadedImage.title ? (
-          <img
-            src={uploadedImage.image}
-            alt={uploadedImage.title}
-            style={{ transform: `scale(${zoom})` }}
-            className="w-full h-full object-cover transition-transform duration-300"
-          />
+          <div className="relative">
+            {/* Image */}
+            <img
+              src={uploadedImage.image}
+              alt={uploadedImage.title}
+              style={{ transform: `scale(${zoom})` }}
+              className="w-full h-full object-cover transition-transform duration-300"
+            />
+
+            {/* Title overlay */}
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <h2 className="text-white text-2xl font-bold">
+                {uploadedImage.title}
+              </h2>
+            </div>
+          </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
             No Image Uploaded
@@ -58,25 +68,25 @@ export default function Visualizer({ uploadedImage }) {
         {/* Button overlay at the bottom of the image */}
         <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 sm:space-x-4">
           {/* <button
-            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-4 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={undo}
           >
             <FaUndo className="mr-1 sm:mr-2" /> UNDO
           </button> */}
           {/* <button
-            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-4 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={redo}
           >
             <FaRedo className="mr-1 sm:mr-2" /> REDO
           </button> */}
           <button
-            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-4 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={zoomIn}
           >
             <FaSearchPlus className="mr-1 sm:mr-2" /> ZOOM IN
           </button>
           <button
-            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-4 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={zoomOut}
           >
             <FaSearchMinus className="mr-1 sm:mr-2" /> ZOOM OUT
