@@ -1,83 +1,85 @@
 import { useState } from "react";
-import { FaUndo, FaRedo, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
-// import { IoMdSync } from "react-icons/io"; // For the Rotate Preview icon
-import roomPic from "../assets/roomPic.jpg"; // Update this with the correct image path
+import { FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 
-export default function Visualizer() {
+export default function Visualizer({ uploadedImage }) {
   const [zoom, setZoom] = useState(1);
-  // const [rotation, setRotation] = useState(0);
+  const [history, setHistory] = useState([]); // For undo/redo functionality
+  // const [redoList, setRedoList] = useState([]); // For redo functionality
 
   // Zoom in functionality
   const zoomIn = () => {
+    setHistory([...history, zoom]); // Store current zoom in history for undo
     setZoom((prevZoom) => Math.min(prevZoom + 0.2, 2)); // Max zoom 2x
   };
 
   // Zoom out functionality
   const zoomOut = () => {
+    setHistory([...history, zoom]); // Store current zoom in history for undo
     setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); // Min zoom 1x
   };
 
-  // Undo functionality placeholder
-  const undo = () => {
-    console.log("Undo action");
-    // Add your undo functionality here
-  };
+  // Undo functionality
+  // const undo = () => {
+  //   if (history.length > 0) {
+  //     const lastZoom = history.pop(); // Get the last zoom from history
+  //     setRedoList([...redoList, zoom]); // Save current zoom in redo list
+  //     setZoom(lastZoom);
+  //     setHistory(history); // Update history after undo
+  //   }
+  // };
 
-  // Redo functionality placeholder
-  const redo = () => {
-    console.log("Redo action");
-    // Add your redo functionality here
-  };
-
-  // Rotate functionality
-  // const rotate = () => {
-  //   setRotation((prevRotation) => prevRotation + 90);
+  // Redo functionality
+  // const redo = () => {
+  //   if (redoList.length > 0) {
+  //     const redoZoom = redoList.pop(); // Get the last zoom from redo list
+  //     setHistory([...history, zoom]); // Save current zoom to history
+  //     setZoom(redoZoom);
+  //     setRedoList(redoList); // Update redo list after redo
+  //   }
   // };
 
   return (
     <div className="w-full md:w-2/3 rounded-lg p-4">
       <div className="relative w-full aspect-video bg-gray-200">
-        {/* Image with zoom and rotation functionality */}
-        <img
-          src={roomPic}
-          alt="Room Visualization"
-          style={{ transform: `scale(${zoom}) ` }}
-          className="w-full h-full object-cover transition-transform duration-300"
-        />
-
-        {/* Rotate Preview Button */}
-        {/* <button
-          onClick={rotate}
-          className="absolute top-4 left-4 bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded flex items-center shadow-md"
-        >
-          <IoMdSync className="mr-2" /> ROTATE PREVIEW
-        </button> */}
+        {/* Display the uploaded image only if both image and title are available */}
+        {uploadedImage && uploadedImage.image && uploadedImage.title ? (
+          <img
+            src={uploadedImage.image}
+            alt={uploadedImage.title}
+            style={{ transform: `scale(${zoom})` }}
+            className="w-full h-full object-cover transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-500">
+            No Image Uploaded
+          </div>
+        )}
 
         {/* Button overlay at the bottom of the image */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
-          <button
-            className="flex items-center px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 sm:space-x-4">
+          {/* <button
+            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={undo}
           >
-            <FaUndo className="mr-2" /> UNDO
-          </button>
-          <button
-            className="flex items-center px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            <FaUndo className="mr-1 sm:mr-2" /> UNDO
+          </button> */}
+          {/* <button
+            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={redo}
           >
-            <FaRedo className="mr-2" /> REDO
-          </button>
+            <FaRedo className="mr-1 sm:mr-2" /> REDO
+          </button> */}
           <button
-            className="flex items-center px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={zoomIn}
           >
-            <FaSearchPlus className="mr-2" /> ZOOM IN
+            <FaSearchPlus className="mr-1 sm:mr-2" /> ZOOM IN
           </button>
           <button
-            className="flex items-center px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
+            className="flex items-center px-2 py-1 sm:px-2 sm:py-2 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded"
             onClick={zoomOut}
           >
-            <FaSearchMinus className="mr-2" /> ZOOM OUT
+            <FaSearchMinus className="mr-1 sm:mr-2" /> ZOOM OUT
           </button>
         </div>
       </div>
